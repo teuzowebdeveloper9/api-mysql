@@ -1,25 +1,27 @@
 class Tables {
     init(connection) {
-        this.connection = connection
+        this.connection = connection;
     }
 
-    createTableAtendimentos(){
-        const sql = `CREATE TABLE IF NOT EXISTS atendimento(
-            id int NOT NULL AUTO_INCREMENT PEIMARY KEY,
+    async createTableAtendimentos() {
+        const sql = `
+          CREATE TABLE IF NOT EXISTS atendimento(
+            id int NOT NULL AUTO_INCREMENT PRIMARY KEY,
             DATA DATE,
             servico VARCHAR(255),
             cliente VARCHAR(100),
-            estado ENUM('á caminho', 'concluido', 'cancelado') DEFAULT 'á caminho'
+            estado ENUM('a caminho', 'concluido', 'cancelado') DEFAULT 'a caminho'
+          );
+        `;
 
-        );`;
-        this.connection.query(sql, (error) => {
-            if(error){
-                console.log("querry mal sucedido na criação da tabela atendimento");
-                console.log(error.message());
-               
-            }
-        });
-
-        console.log("tabela atendimento criada com sucesso");
+        try {
+            await this.connection.query(sql);
+            console.log("tabela atendimento criada com sucesso");
+        } catch (error) {
+            console.log("query mal sucedido na criação da tabela atendimento");
+            console.log(error.message);
+        }
     }
 }
+
+export default Tables;
