@@ -1,26 +1,32 @@
 import {Router }from 'express';
+import atendimentoController from '../controllers/atendimentoController.js';
+
 
 export const routes = Router();
+routes.get("/atendimentos", (req, res) => {
+    const list = atendimentoController.search();
+    list.then(atendimentos => res.status(200).json(atendimentos))
+        .catch(error => res.status(500).json({ error: error.message }));
+});
 
-routes.get("/atendimentos", (req,res) => {
-    res.json('listando todos os atendimentos')
-})
+routes.post("/atendimentos", (req, res) => {
+    const newAtendimento = req.body;
+    atendimentoController.create(newAtendimento)
+        .then(result => res.status(201).json(result))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
 
-routes.post("atendimentos", (req,res) => {
-    res.json('criando um atendimento')
-})
+routes.put("/atendimentos/:id", (req, res) => {
+    const { id } = req.params;
+    const updatedAtendimento = req.body;
+    atendimentoController.update(id, updatedAtendimento)
+        .then(result => res.status(200).json(result))
+        .catch(error => res.status(400).json({ error: error.message }));
+});
 
-routes.put("atendimentos/:id", (req,res) => {
-    const {id} = req.params
-    res.json(`editar atendimento ${id}`)
-})
-
-routes.delete(`atendimentos/:id`, (req,res) => {
-    const {id} = req.params
-    res.json(`atendimento ${id} cancelado`)
-})
-
-routes.get("/hi", (req, res) => {
-    res.json('teste oi')
-})
-
+routes.delete("/atendimentos/:id", (req, res) => {
+    const { id } = req.params;
+    atendimentoController.delete(id)
+        .then(result => res.status(200).json(result))
+        .catch(error => res.status(400).json({ error: error.message }));
+});

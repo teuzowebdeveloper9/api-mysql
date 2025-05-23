@@ -7,11 +7,12 @@ export const connectDB = async () => {
             host: variables.HOST,
             user: variables.USER,
             database: variables.DB,
-            port: variables.PORT
+            port: variables.PORT,
+            
         });
 
         console.log('Conectado!');
-        return connection;  
+        return connection;
     } catch (error) {
         console.log('Erro ao conectar:', error);
         throw error; 
